@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+<title>Djed's Mission: Good Guys vs Bad Guys</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bangers&family=Baloo+2:wght@400;600;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div id="app">
+  <div class="topbar">
+    <div class="burst"></div>
+    <div class="kicker">Mission Briefing</div>
+    <h1>DJED'S BIRTHDAY MISSION</h1>
+    <div class="tag">Good Guys vs. Bad Guys &middot; Turning 4!</div>
+    <button class="settings-toggle" id="settingsBtn" title="Admin">&#9998;</button>
+  </div>
+  <main id="screen"></main>
+  <div class="tabbar" id="tabbar">
+    <button data-tab="invite" class="active"><span class="icon">&#127881;</span>Invite</button>
+    <button data-tab="rsvp"><span class="icon">&#128231;</span>RSVP</button>
+    <button data-tab="suitup"><span class="icon">&#128375;&#65039;</span>Suit Up</button>
+    <button data-tab="spin"><span class="icon">&#127919;</span>Spin</button>
+    <button data-tab="capsule"><span class="icon">&#128248;</span>Capsule</button>
+  </div>
+  <div class="toast" id="toast"></div>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-database-compat.js"></script>
+<script src="firebase-config.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
