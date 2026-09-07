@@ -1,6 +1,6 @@
-# Djed's Birthday Mission App
+# Djed's Spidey Treasure Hunt App
 
-A digital companion to Djed's 4th birthday party (Spider-Man: Good Guys vs. Bad Guys, 13 September 2026). Guests RSVP, get randomly assigned a hero or villain character, spin a wheel to pick a co-leader for each game, and browse a shared photo capsule afterwards.
+A digital companion to Djed's 4th birthday party — a Heroes & Villains treasure hunt through the Iziko South African Museum (13 September 2026). Guests RSVP, get randomly assigned a hero or villain character, spin a wheel to pick a co-leader for each stop, and browse a shared photo capsule afterwards.
 
 No backend to run — plain HTML/CSS/JS backed by a free Firebase Realtime Database, deployed on GitHub Pages.
 

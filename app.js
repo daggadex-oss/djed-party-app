@@ -16,31 +16,19 @@
     greengoblin: {name:'Green Goblin',  team:'villain', emoji:'🎃'}
   };
 
-  var GAMES = [
-    {
-      title:'1. Good Guys Says',
-      desc:"Djed calls out hero moves (web-sling! climb the wall!) and everyone copies. Ends on a big freeze-and-hold finale. ~2-3 min.",
-      icon:'🦸'
-    },
-    {
-      title:'2. Web Freeze',
-      desc:"Red-light/green-light, Spidey style. Good Guys 'web' the Bad Guys until every villain is caught. ~3-4 min.",
-      icon:'🕸️'
-    },
-    {
-      title:'3. Villain Capture',
-      desc:"Djed leads the hunt for hidden villain tokens. Game ends when the mission bag is full. ~4-5 min.",
-      icon:'🗺️'
-    }
-  ];
+  // Stops on the museum trail — deliberately vague, just enough to pick a
+  // co-leader per stop without spoiling the envelope/clue mechanic.
+  var STOPS = ['Stop 1', 'Stop 2', 'Stop 3', 'Stop 4'];
 
   var DEFAULT_SETTINGS = {
-    dateLine: 'Sunday 13 September 2026',
-    venueSunny: "Sunny plan: our usual park — details to follow",
-    venueRain: "Backup plan: indoor play park — details to follow",
-    driveLink: '',
+    venueName: 'Iziko South African Museum',
+    venueAddress: "25 Queen Victoria Street, Gardens, Cape Town",
+    eventDate: 'Sunday, 13 September 2026',
+    eventTime: '1:00 PM',
+    entryFeeNote: "Museum entry is R60/adult, R30/child — each guest covers their own admission at the door.",
+    driveLink: 'https://drive.google.com/drive/folders/10hgq4f6ciIKKRaompc_T8dlf2uKA2k1S?usp=sharing',
     rsvpNote: "Come dressed as your favourite hero or villain if you like — totally optional!",
-    rsvpDeadline: '2026-09-06',
+    rsvpDeadline: '2026-09-11',
     rsvpReopened: false
   };
 
@@ -103,7 +91,7 @@
     spinNames: [],
     spinning: false,
     coLeader: null,
-    coLeaderGame: GAMES[0].title,
+    coLeaderGame: STOPS[0],
     adminAuthed: sessionGet('djed-admin-authed') === '1',
     adminPasswordInput: '',
     adminLoginError: ''
@@ -225,29 +213,32 @@
 
   // ---------------- INVITE TAB ----------------
   function renderInvite(){
-    var gamesHtml = GAMES.map(function(g){
-      return '<div class="game-card"><div class="gtitle">'+g.icon+' '+esc(g.title)+'</div><p>'+esc(g.desc)+'</p></div>';
-    }).join('');
-
     screen.innerHTML =
       '<div class="panel">'+
         '<span class="eyebrow">You\'re Invited</span>'+
-        '<h2>A Spider-Man Mission Awaits</h2>'+
-        '<p>Djed is turning 4, and he needs backup! This year\'s party is Good Guys vs. Bad Guys — everyone gets randomly assigned a hero or villain from the Spidey crew, and Djed leads the missions.</p>'+
-        '<div class="chip-row">'+
-          '<span class="chip red">📅 '+esc(state.settings.dateLine)+'</span>'+
-        '</div>'+
+        '<h2>A Spidey Treasure Hunt Awaits</h2>'+
+        '<p>Djed is turning 4! Everyone\'s assigned a hero or villain from Spidey\'s world — we\'re all on the same team today, working together to help Djed complete his mission.</p>'+
       '</div>'+
       '<div class="panel">'+
-        '<span class="eyebrow">Weather Plan</span>'+
-        '<p>☀️ <strong>'+esc(state.settings.venueSunny)+'</strong></p>'+
-        '<p>☔ <strong>'+esc(state.settings.venueRain)+'</strong></p>'+
+        '<span class="eyebrow">Where &amp; When</span>'+
+        '<p>📅 <strong>'+esc(state.settings.eventDate)+' — '+esc(state.settings.eventTime)+'</strong></p>'+
+        '<p>📍 <strong>'+esc(state.settings.venueName)+'</strong><br>'+esc(state.settings.venueAddress)+'</p>'+
+        '<p>🎟️ <strong>'+esc(state.settings.entryFeeNote)+'</strong></p>'+
         '<p style="margin-top:10px; opacity:0.75; font-size:13px;">'+esc(state.settings.rsvpNote)+'</p>'+
       '</div>'+
       '<div class="panel">'+
-        '<span class="eyebrow">The Missions</span>'+
-        '<h2>Three Games</h2>'+
-        gamesHtml+
+        '<span class="eyebrow">The Mission</span>'+
+        '<h2>🕸️ Spidey Needs Your Help</h2>'+
+        '<p>Spidey needs the Heroes &amp; Villains to team up! Djed will lead everyone on a trail through the museum — sea creatures, land animals, and ancient dinosaurs — following clues along the way. Work together, follow Djed\'s lead, and stick around for the big reveal at the end (hint: it\'s sweet).</p>'+
+        '<p>When the mission\'s complete, we\'ll gather outside for cake and sing Happy Birthday to Djed!</p>'+
+      '</div>'+
+      '<div class="panel">'+
+        '<span class="eyebrow">How To Use This App</span>'+
+        '<h2>Your Next Steps</h2>'+
+        '<div class="game-card"><div class="gtitle">📩 1. RSVP</div><p>Let us know you\'re coming (and how many people!) before the deadline — see the RSVP tab for the countdown.</p></div>'+
+        '<div class="game-card"><div class="gtitle">🕸️ 2. Suit Up</div><p>Get randomly assigned your hero or villain, then add a photo so we know your face for the mission.</p></div>'+
+        '<div class="game-card"><div class="gtitle">🎯 3. Spin</div><p>On the day, Djed\'s helpers spin the wheel at each stop to pick a co-leader — it could be you!</p></div>'+
+        '<div class="game-card"><div class="gtitle">📸 4. Capsule</div><p>After the big day, come back to see the whole squad and grab the shared photos.</p></div>'+
       '</div>'+
       '<button class="btn blue" id="goRsvp">📩 RSVP Now →</button>';
 
@@ -355,7 +346,7 @@
     if(state.rolling){
       revealHtml = '<div class="reveal-placeholder">Rolling the mission...</div>';
     } else if(chosenInfo){
-      var teamLabel = chosenInfo.team === 'hero' ? 'GOOD GUY' : 'BAD GUY';
+      var teamLabel = chosenInfo.team === 'hero' ? 'HERO' : 'VILLAIN';
       var dupLabel = mine ? duplicateLabel(mine) : '';
       revealHtml = '<div class="reveal-emoji">'+chosenInfo.emoji+'</div>'+
         '<div class="reveal-name">'+esc(chosenInfo.name)+esc(dupLabel)+'</div>'+
@@ -498,10 +489,10 @@
       '<div class="panel">'+
         '<span class="eyebrow">Random Co-Leader</span>'+
         '<h2>Who Helps Djed Lead?</h2>'+
-        '<p>Pick which mission, then spin. Djed and the winner lead together for that round.</p>'+
-        '<label class="field-label">Mission</label>'+
+        '<p>Pick which stop, then spin. Djed and the winner help lead the way together.</p>'+
+        '<label class="field-label">Stop</label>'+
         '<select id="gameSelect">'+
-          GAMES.map(function(g){ return '<option value="'+esc(g.title)+'" '+(state.coLeaderGame===g.title?'selected':'')+'>'+esc(g.title)+'</option>'; }).join('')+
+          STOPS.map(function(s){ return '<option value="'+esc(s)+'" '+(state.coLeaderGame===s?'selected':'')+'>'+esc(s)+'</option>'; }).join('')+
         '</select>'+
         '<div class="wheel-wrap">'+
           '<div class="wheel-pointer"></div>'+
@@ -553,7 +544,7 @@
     } else {
       gridHtml = '<div class="guest-grid">' + state.guests.map(function(g){
         var info = CHARACTER_INFO[g.characterKey] || {name:g.characterKey, emoji:'🕷️'};
-        var teamLabel = g.team === 'hero' ? 'GOOD GUY' : 'BAD GUY';
+        var teamLabel = g.team === 'hero' ? 'HERO' : 'VILLAIN';
         var dupLabel = duplicateLabel(g);
         var img = g.photo ? '<img src="'+g.photo+'" alt="'+esc(g.name)+'">' : '<div class="noimg">'+ info.emoji +'</div>';
         return '<div class="guest-card">'+img+
@@ -568,8 +559,8 @@
         '<h2>The Whole Squad</h2>'+
         '<div class="stat-row">'+
           '<div class="stat-box"><div class="num">'+state.guests.length+'</div><div class="lbl">Checked In</div></div>'+
-          '<div class="stat-box"><div class="num">'+heroCount+'</div><div class="lbl">Good Guys</div></div>'+
-          '<div class="stat-box"><div class="num">'+villainCount+'</div><div class="lbl">Bad Guys</div></div>'+
+          '<div class="stat-box"><div class="num">'+heroCount+'</div><div class="lbl">Heroes</div></div>'+
+          '<div class="stat-box"><div class="num">'+villainCount+'</div><div class="lbl">Villains</div></div>'+
         '</div>'+
         gridHtml+
       '</div>'+
@@ -578,7 +569,7 @@
         '<h2>Full Album</h2>'+
         '<p>Guests: upload your phone photos from the day to the shared album so everyone can relive it.</p>'+
         (state.settings.driveLink ?
-          '<a class="drivelink" href="'+esc(state.settings.driveLink)+'" target="_blank" rel="noopener">'+esc(state.settings.driveLink)+'</a>' :
+          '<a class="drivelink" href="'+esc(state.settings.driveLink)+'" target="_blank" rel="noopener">📁 View &amp; Upload Photos →</a>' :
           '<p style="opacity:0.6; font-size:13px;">Drive link not added yet — the host can add it in ⚙️ settings.</p>')+
       '</div>';
   }
@@ -633,12 +624,16 @@
       '<div class="panel">'+
         '<span class="eyebrow">Host Only</span>'+
         '<h2>Edit Event Details</h2>'+
-        '<label class="field-label">Date line</label>'+
-        '<input type="text" id="s_date" value="'+esc(state.settings.dateLine)+'">'+
-        '<label class="field-label">Sunny plan</label>'+
-        '<input type="text" id="s_sunny" value="'+esc(state.settings.venueSunny)+'">'+
-        '<label class="field-label">Rain plan</label>'+
-        '<input type="text" id="s_rain" value="'+esc(state.settings.venueRain)+'">'+
+        '<label class="field-label">Venue name</label>'+
+        '<input type="text" id="s_venueName" value="'+esc(state.settings.venueName)+'">'+
+        '<label class="field-label">Venue address</label>'+
+        '<input type="text" id="s_venueAddress" value="'+esc(state.settings.venueAddress)+'">'+
+        '<label class="field-label">Event date</label>'+
+        '<input type="text" id="s_eventDate" value="'+esc(state.settings.eventDate)+'">'+
+        '<label class="field-label">Event time</label>'+
+        '<input type="text" id="s_eventTime" value="'+esc(state.settings.eventTime)+'">'+
+        '<label class="field-label">Entry fee note</label>'+
+        '<input type="text" id="s_entryFee" value="'+esc(state.settings.entryFeeNote)+'">'+
         '<label class="field-label">RSVP / dress-up note</label>'+
         '<input type="text" id="s_note" value="'+esc(state.settings.rsvpNote)+'">'+
         '<label class="field-label">Shared Google Drive photo album link</label>'+
@@ -687,9 +682,11 @@
 
     document.getElementById('saveSettings').addEventListener('click', function(){
       var newSettings = {
-        dateLine: document.getElementById('s_date').value.trim() || DEFAULT_SETTINGS.dateLine,
-        venueSunny: document.getElementById('s_sunny').value.trim() || DEFAULT_SETTINGS.venueSunny,
-        venueRain: document.getElementById('s_rain').value.trim() || DEFAULT_SETTINGS.venueRain,
+        venueName: document.getElementById('s_venueName').value.trim() || DEFAULT_SETTINGS.venueName,
+        venueAddress: document.getElementById('s_venueAddress').value.trim() || DEFAULT_SETTINGS.venueAddress,
+        eventDate: document.getElementById('s_eventDate').value.trim() || DEFAULT_SETTINGS.eventDate,
+        eventTime: document.getElementById('s_eventTime').value.trim() || DEFAULT_SETTINGS.eventTime,
+        entryFeeNote: document.getElementById('s_entryFee').value.trim(),
         rsvpNote: document.getElementById('s_note').value.trim(),
         driveLink: document.getElementById('s_drive').value.trim(),
         rsvpDeadline: document.getElementById('s_deadline').value || DEFAULT_SETTINGS.rsvpDeadline,
